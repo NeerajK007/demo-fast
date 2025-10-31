@@ -1,0 +1,361 @@
+customers:
+- customer_id: CUST001
+  name: Alice A
+  dob: '2017-11-06'
+  account_id: ACCT-100001
+  balance: 2315.49
+  transactions:
+  - tx_id: TX1000
+    date: '2025-06-11'
+    amount: -2551.08
+    description: ATM
+  - tx_id: TX1001
+    date: '2025-09-07'
+    amount: 1766.99
+    description: DEBIT
+  - tx_id: TX1002
+    date: '2025-09-15'
+    amount: 904.93
+    description: POS
+- customer_id: CUST002
+  name: Bob B
+  dob: '1990-07-03'
+  account_id: ACCT-100002
+  balance: 1964.54
+  transactions:
+  - tx_id: TX1003
+    date: '2025-07-02'
+    amount: 53.55
+    description: POS
+  - tx_id: TX1004
+    date: '2025-01-15'
+    amount: -3011.62
+    description: CREDIT
+  - tx_id: TX1005
+    date: '2024-11-04'
+    amount: 449.41
+    description: ATM
+- customer_id: CUST003
+  name: Carol C
+  dob: '2009-04-25'
+  account_id: ACCT-100003
+  balance: 11826.39
+  transactions:
+  - tx_id: TX1006
+    date: '2025-10-26'
+    amount: 2588.07
+    description: ATM
+  - tx_id: TX1007
+    date: '2024-11-06'
+    amount: -773.86
+    description: ACH
+  - tx_id: TX1008
+    date: '2025-08-11'
+    amount: -2846.86
+    description: ACH
+- customer_id: CUST004
+  name: David D
+  dob: '1993-10-01'
+  account_id: ACCT-100004
+  balance: 1945.64
+  transactions:
+  - tx_id: TX1009
+    date: '2025-09-10'
+    amount: -1410.21
+    description: ACH
+  - tx_id: TX1010
+    date: '2024-12-24'
+    amount: -2354.79
+    description: POS
+  - tx_id: TX1011
+    date: '2025-03-08'
+    amount: 362.28
+    description: WIRE
+- customer_id: CUST005
+  name: Eve E
+  dob: '1992-09-13'
+  account_id: ACCT-100005
+  balance: 11085.61
+  transactions:
+  - tx_id: TX1012
+    date: '2024-12-12'
+    amount: 1185.2
+    description: ACH
+  - tx_id: TX1013
+    date: '2025-01-07'
+    amount: -3077.11
+    description: POS
+  - tx_id: TX1014
+    date: '2025-10-06'
+    amount: 1612.63
+    description: ACH
+- customer_id: CUST006
+  name: Frank F
+  dob: '1992-09-29'
+  account_id: ACCT-100006
+  balance: 17120.82
+  transactions:
+  - tx_id: TX1015
+    date: '2025-09-08'
+    amount: -1198.74
+    description: WIRE
+  - tx_id: TX1016
+    date: '2024-12-08'
+    amount: 3341.1
+    description: ATM
+  - tx_id: TX1017
+    date: '2025-04-23'
+    amount: -1447.29
+    description: CREDIT
+- customer_id: CUST007
+  name: Grace G
+  dob: '2001-02-21'
+  account_id: ACCT-100007
+  balance: 14066.22
+  transactions:
+  - tx_id: TX1018
+    date: '2024-11-14'
+    amount: 1480.35
+    description: DEBIT
+  - tx_id: TX1019
+    date: '2024-12-08'
+    amount: -3288.61
+    description: CREDIT
+  - tx_id: TX1020
+    date: '2025-06-26'
+    amount: -3365.98
+    description: WIRE
+- customer_id: CUST008
+  name: Heidi H
+  dob: '2001-04-10'
+  account_id: ACCT-100008
+  balance: 19791.51
+  transactions:
+  - tx_id: TX1021
+    date: '2024-12-06'
+    amount: 1881.62
+    description: ATM
+  - tx_id: TX1022
+    date: '2024-11-13'
+    amount: -1757.17
+    description: POS
+  - tx_id: TX1023
+    date: '2025-07-04'
+    amount: 3218.03
+    description: ACH
+- customer_id: CUST009
+  name: Ivan I
+  dob: '2007-02-28'
+  account_id: ACCT-100009
+  balance: 5428.04
+  transactions:
+  - tx_id: TX1024
+    date: '2025-07-13'
+    amount: 4131.36
+    description: DEBIT
+  - tx_id: TX1025
+    date: '2025-05-21'
+    amount: -2873.73
+    description: WIRE
+  - tx_id: TX1026
+    date: '2025-04-10'
+    amount: 3846.83
+    description: CREDIT
+- customer_id: CUST010
+  name: Judy J
+  dob: '2009-09-30'
+  account_id: ACCT-100010
+  balance: 2943.14
+  transactions:
+  - tx_id: TX1027
+    date: '2025-08-19'
+    amount: -2533.72
+    description: DEBIT
+  - tx_id: TX1028
+    date: '2025-01-27'
+    amount: -2372.58
+    description: DEBIT
+  - tx_id: TX1029
+    date: '2025-03-24'
+    amount: 3978.23
+    description: WIRE
+- customer_id: CUST011
+  name: Karl K
+  dob: '2005-05-27'
+  account_id: ACCT-100011
+  balance: 4464.48
+  transactions:
+  - tx_id: TX1030
+    date: '2025-08-20'
+    amount: 95.26
+    description: POS
+  - tx_id: TX1031
+    date: '2025-10-05'
+    amount: 3611.03
+    description: ATM
+  - tx_id: TX1032
+    date: '2024-12-12'
+    amount: -3400.18
+    description: CREDIT
+- customer_id: CUST012
+  name: Laura L
+  dob: '2008-02-07'
+  account_id: ACCT-100012
+  balance: 11968.54
+  transactions:
+  - tx_id: TX1033
+    date: '2025-04-15'
+    amount: -1183.81
+    description: WIRE
+  - tx_id: TX1034
+    date: '2025-02-01'
+    amount: -2485.86
+    description: DEBIT
+  - tx_id: TX1035
+    date: '2025-10-24'
+    amount: 1802.83
+    description: POS
+- customer_id: CUST013
+  name: Mallory M
+  dob: '2019-09-30'
+  account_id: ACCT-100013
+  balance: 17707.29
+  transactions:
+  - tx_id: TX1036
+    date: '2025-06-15'
+    amount: 2685.99
+    description: ACH
+  - tx_id: TX1037
+    date: '2025-09-02'
+    amount: -2065.0
+    description: ATM
+  - tx_id: TX1038
+    date: '2025-03-11'
+    amount: -4967.55
+    description: CREDIT
+- customer_id: CUST014
+  name: Neil N
+  dob: '2021-06-13'
+  account_id: ACCT-100014
+  balance: 5341.44
+  transactions:
+  - tx_id: TX1039
+    date: '2025-02-15'
+    amount: 2619.62
+    description: DEBIT
+  - tx_id: TX1040
+    date: '2025-09-05'
+    amount: 3705.19
+    description: ACH
+  - tx_id: TX1041
+    date: '2024-12-06'
+    amount: 76.63
+    description: ATM
+- customer_id: CUST015
+  name: Olivia O
+  dob: '1996-01-09'
+  account_id: ACCT-100015
+  balance: 7540.89
+  transactions:
+  - tx_id: TX1042
+    date: '2025-08-08'
+    amount: 393.79
+    description: DEBIT
+  - tx_id: TX1043
+    date: '2025-10-29'
+    amount: 989.45
+    description: WIRE
+  - tx_id: TX1044
+    date: '2025-10-20'
+    amount: -3881.32
+    description: ACH
+- customer_id: CUST016
+  name: Peggy P
+  dob: '2002-12-17'
+  account_id: ACCT-100016
+  balance: 4865.1
+  transactions:
+  - tx_id: TX1045
+    date: '2025-06-28'
+    amount: 3780.1
+    description: POS
+  - tx_id: TX1046
+    date: '2025-09-16'
+    amount: 2319.08
+    description: POS
+  - tx_id: TX1047
+    date: '2025-01-30'
+    amount: 2658.34
+    description: ATM
+- customer_id: CUST017
+  name: Quentin Q
+  dob: '2018-10-05'
+  account_id: ACCT-100017
+  balance: 9558.12
+  transactions:
+  - tx_id: TX1048
+    date: '2025-01-21'
+    amount: -3348.73
+    description: DEBIT
+  - tx_id: TX1049
+    date: '2024-12-23'
+    amount: -768.62
+    description: ATM
+  - tx_id: TX1050
+    date: '2025-01-26'
+    amount: 2552.65
+    description: CREDIT
+- customer_id: CUST018
+  name: Rupert R
+  dob: '1998-03-10'
+  account_id: ACCT-100018
+  balance: 14287.68
+  transactions:
+  - tx_id: TX1051
+    date: '2025-04-08'
+    amount: 4951.49
+    description: CREDIT
+  - tx_id: TX1052
+    date: '2025-04-21'
+    amount: -619.0
+    description: DEBIT
+  - tx_id: TX1053
+    date: '2025-03-12'
+    amount: -3789.96
+    description: ATM
+- customer_id: CUST019
+  name: Sybil S
+  dob: '1992-01-15'
+  account_id: ACCT-100019
+  balance: 6827.9
+  transactions:
+  - tx_id: TX1054
+    date: '2025-01-01'
+    amount: 539.22
+    description: DEBIT
+  - tx_id: TX1055
+    date: '2025-07-09'
+    amount: -4928.09
+    description: CREDIT
+  - tx_id: TX1056
+    date: '2024-12-10'
+    amount: -4411.26
+    description: POS
+- customer_id: CUST020
+  name: Trent T
+  dob: '1990-07-29'
+  account_id: ACCT-100020
+  balance: 17206.74
+  transactions:
+  - tx_id: TX1057
+    date: '2025-09-23'
+    amount: 141.56
+    description: ACH
+  - tx_id: TX1058
+    date: '2024-11-21'
+    amount: -145.86
+    description: DEBIT
+  - tx_id: TX1059
+    date: '2025-08-23'
+    amount: 2233.53
+    description: DEBIT

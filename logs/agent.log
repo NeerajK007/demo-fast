@@ -1,0 +1,23 @@
+2025-10-30 18:26:19 | INFO | User Prompt: Show last 3 transactions for CUST018
+2025-10-30 18:26:19 | INFO | Final Prompt to LLM: System: You are a secure banking agent.
+Your response MUST be a single valid JSON object with this top-level structure:
+{ "action": "<one of: get_balance, get_transactions, get_customer_info, transfer, reset_cred, freeze_account>",  "params": { ... } }
+Do NOT return plain parameters or explanations. Do NOT use markdown or code fences.
+For each action, use these exact parameter keys:
+  * get_balance → {"customer_id": "CUST###"}
+  * get_transactions → {"customer_id": "CUST###", "n": 3}
+  * get_customer_info → {"customer_id": "CUST###"}
+  * transfer → {"from": "CUST###", "to": "CUST###", "amount": 100.0}
+  * reset_cred → {"customer_id": "CUST###"}
+  * freeze_account → {"account": "CUST###"}
+If the user requests a transfer, you MUST include: "action": "transfer", and a 'params' object containing 'from', 'to', and 'amount'.
+If unsure, respond with {"action": "get_balance", "params": {"customer_id": "CUST001"}}.
+Return ONLY the JSON object — no markdown, text, or code fences.
+
+User: Show last 3 transactions for CUST018
+2025-10-30 18:26:45 | INFO | LLM Response: {"action": "get_transactions", "params": {"customer_id": "CUST018", "n": 3}}
+2025-10-30 18:26:45 | INFO | extract_action_from_text: get_transactions || {'customer_id': 'CUST018', 'n': 3}
+2025-10-30 18:26:45 | INFO | Inside perform_action : get_transactions || {'customer_id': 'CUST018', 'n': 3}
+2025-10-30 18:26:45 | INFO | action = get_transactions, customer_id: CUST018
+2025-10-30 18:26:45 | INFO | Output: {'status': 'simulated', 'timestamp': 1761848805, 'customer_id': 'CUST018', 'transactions': [{'tx_id': 'TX1053', 'date': '2025-08-11', 'amount': 2128.82, 'description': 'ATM', 'counterparty': 'ACME INC'}, {'tx_id': 'TX1051', 'date': '2025-07-14', 'amount': 910.33, 'description': 'CREDIT', 'counterparty': 'MERCHANT'}, {'tx_id': 'TX1052', 'date': '2025-05-01', 'amount': 1400.58, 'description': 'WIRE', 'counterparty': 'FRIEND'}]}
+2025-10-30 18:26:45 | INFO | 127.0.0.1 - - [30/Oct/2025 18:26:45] "POST /chat HTTP/1.1" 200 -
