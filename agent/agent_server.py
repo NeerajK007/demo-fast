@@ -283,7 +283,7 @@ def chat():
     log_event(f"Final Prompt to LLM: {prompt}")
 
     try:
-        r = requests.post(LLM_URL, json={"prompt": prompt}, timeout=30)
+        r = requests.post(LLM_URL, json={"prompt": prompt}, timeout=60)
         out = r.json().get("output", "")
         log_event(f"LLM Response: {out}")
     except Exception as e:

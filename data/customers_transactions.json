@@ -676,7 +676,7 @@
         "account_id": "ACCT100016",
         "routing_number": "RT966616964",
         "account_type": "savings",
-        "balance": 13114.13,
+        "balance": 13214.13,
         "currency": "USD"
       },
       "contact": {
@@ -705,6 +705,12 @@
           "amount": -1482.01,
           "description": "CREDIT",
           "counterparty": "UTILITY CO"
+        },
+        {
+          "tx_id": "TX-1761886743",
+          "date": "2025-10-31",
+          "amount": 100.0,
+          "description": "Transfer from CUST017"
         }
       ],
       "notes": "synthetic demo data - no real PII"
@@ -718,7 +724,7 @@
         "account_id": "ACCT100017",
         "routing_number": "RT154544899",
         "account_type": "checking",
-        "balance": 1936.74,
+        "balance": 1836.74,
         "currency": "USD"
       },
       "contact": {
@@ -747,6 +753,12 @@
           "amount": -2123.78,
           "description": "CREDIT",
           "counterparty": "ACME INC"
+        },
+        {
+          "tx_id": "TX-1761886743",
+          "date": "2025-10-31",
+          "amount": -100.0,
+          "description": "Transfer to CUST016"
         }
       ],
       "notes": "synthetic demo data - no real PII"
