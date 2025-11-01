@@ -1,5 +1,11 @@
-import json, time, os, logging, re, requests
+import json
+import time
+import os
+import logging
+import re
+import requests
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 # ---------- CONFIG ----------
 ALLOWED_ACTIONS = {
@@ -34,9 +40,29 @@ def log_event(entry):
 
 # ---------- FLASK APP ----------
 app = Flask(__name__)
+
+# Read config from env
 LLM_URL = os.environ.get("LLM_URL", "http://localhost:5002/generate")
 DATA_PATH = os.environ.get("DATA_PATH", "data/customers_transactions.json")
 AUTO_EXECUTE = os.environ.get("AUTO_EXECUTE", "true").lower() == "true"
+
+# CORS: allow origins from env, default to your Vite dev origin
+# Example: export ALLOWED_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
+allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173")
+allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+
+# If you want to allow everything in development, set ALLOWED_ORIGINS="*"
+cors_resources = {r"/chat": {"origins": allowed_origins if allowed_origins != ["*"] else "*"}}
+
+# Apply CORS middleware (handles OPTIONS preflight automatically)
+CORS(app,
+     resources=cors_resources,
+     supports_credentials=False,
+     allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+     methods=["GET", "POST", "OPTIONS"])
+
+# Log the configured CORS allowed origins for debugging
+log_event(f"CORS allowed origins: {allowed_origins_env}")
 
 
 # ---------- Helper: Load and save data ----------
@@ -252,7 +278,6 @@ def extract_action_from_text(text):
     return None, {}
 
 
-
 # ---------- Chat Endpoint ----------
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -276,8 +301,7 @@ def chat():
         "\"action\": \"transfer\", and a 'params' object containing 'from', 'to', and 'amount'.\n"
         "If unsure, respond with {\"action\": \"get_balance\", \"params\": {\"customer_id\": \"CUST001\"}}.\n"
         "Return ONLY the JSON object — no markdown, text, or code fences."
-)
-
+    )
 
     prompt = f"{system}\n\nUser: {user_prompt}"
     log_event(f"Final Prompt to LLM: {prompt}")
@@ -308,4 +332,7 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5003)
+    # Bind to all interfaces by default (useful for containers); use env PORT if provided
+    port = int(os.environ.get("PORT", 5003))
+    log_event(f"Starting agent server on 0.0.0.0:{port}, LLM_URL={LLM_URL}")
+    app.run(host="0.0.0.0", port=port)
