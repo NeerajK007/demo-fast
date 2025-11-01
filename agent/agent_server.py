@@ -1,6 +1,7 @@
 import json
 import requests
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -153,4 +154,7 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5003)
+    # Bind to all interfaces by default (useful for containers); use env PORT if provided
+    port = int(os.environ.get("PORT", 5003))
+    log_event(f"Starting agent server on 0.0.0.0:{port}, LLM_URL={LLM_URL}")
+    app.run(host="0.0.0.0", port=port)
