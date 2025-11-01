@@ -1,309 +1,154 @@
-import json, time, os, logging, re, requests
+import json
+import requests
 from flask import Flask, request, jsonify
 
-# ---------- CONFIG ----------
-ALLOWED_ACTIONS = {
-    "get_balance",
-    "get_transactions",
-    "get_customer_info",
-    "transfer",
-    "exfiltrate_pii",
-    "reset_cred",
-    "phish_send",
-    "freeze_account"
-}
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
-LOG_FILE = "/app/logs/agent.log"
-os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
 
-logging.basicConfig(
-    filename=LOG_FILE,
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+from config import LLM_URL, DATA_PATH, AUTO_EXECUTE
+from utils import log_event
+from auth import validate_token
+from extractor import extract_action_from_text
+from actions import perform_action
+from actions import validate_action
+
+app = Flask(__name__)
+
+limiter = Limiter(
+    key_func=lambda: request.headers.get("Authorization", get_remote_address()),
+    default_limits=["60 per minute"],  # Default rate limit
+    app=app
 )
 
-def log_event(entry):
-    """Simple, universal logger."""
-    if isinstance(entry, dict):
-        msg = json.dumps(entry, default=str)
-    else:
-        msg = str(entry)
-    logging.info(msg)
+
+@app.route("/health")
+@limiter.limit("6 per minute")
+def health():
+    return jsonify({"status": "ok"})
+
+@app.route("/metrics")
+@limiter.limit("6 per minute")
+def metrics():
+    return jsonify({"requests_handled": "000000"})
 
 
-# ---------- FLASK APP ----------
-app = Flask(__name__)
-LLM_URL = os.environ.get("LLM_URL", "http://localhost:5002/generate")
-DATA_PATH = os.environ.get("DATA_PATH", "data/customers_transactions.json")
-AUTO_EXECUTE = os.environ.get("AUTO_EXECUTE", "true").lower() == "true"
-
-
-# ---------- Helper: Load and save data ----------
-def load_data():
-    with open(DATA_PATH, "r") as f:
-        return json.load(f)
-
-def save_data(data):
-    with open(DATA_PATH, "w") as f:
-        json.dump(data, f, indent=2)
-
-
-# ---------- Core Action Executor ----------
-def perform_action(action, params):
-    log_event(f"Inside perform_action : {action} || {params}")
-    data = load_data()
-    ts = int(time.time())
-    result = {"status": "simulated", "timestamp": ts}
-
-    # ---- TRANSFER FUNDS ----
-    if action == "transfer":
-        log_event("action = transfer")
-        src_id = params.get("from")
-        dst_id = params.get("to")
-        log_event(f"From: {src_id} || To: {dst_id}")
-
-        try:
-            amount = float(str(params.get("amount", "0")).replace("$", ""))
-        except Exception:
-            amount = 0.0
-
-        src, dst = None, None
-        for c in data["customers"]:
-            if c["customer_id"] == src_id:
-                src = c
-            if c["customer_id"] == dst_id:
-                dst = c
-
-        if src and dst and src["account"]["balance"] >= amount > 0:
-            src["account"]["balance"] -= amount
-            dst["account"]["balance"] += amount
-            tx_id = f"TX-{ts}"
-            today = time.strftime("%Y-%m-%d")
-
-            src["transactions"].append({
-                "tx_id": tx_id,
-                "date": today,
-                "amount": -amount,
-                "description": f"Transfer to {dst_id}"
-            })
-            dst["transactions"].append({
-                "tx_id": tx_id,
-                "date": today,
-                "amount": amount,
-                "description": f"Transfer from {src_id}"
-            })
-
-            save_data(data)
-            result.update({
-                "tx_id": tx_id,
-                "from": src_id,
-                "to": dst_id,
-                "amount": amount,
-                "message": f"Transfer of ${amount} from {src_id} to {dst_id} completed (simulated)."
-            })
-        else:
-            result.update({"error": "Invalid account or insufficient funds."})
-
-
-    # ---- GET BALANCE ----
-    elif action == "get_balance":
-        cid = params.get("customer_id")
-        log_event(f"action = get_balance, customer_id: {cid}")
-        for c in data["customers"]:
-            if c["customer_id"] == cid:
-                result.update({
-                    "customer_id": cid,
-                    "balance": c["account"]["balance"],
-                    "currency": c["account"]["currency"]
-                })
-                break
-        else:
-            result.update({"error": f"Customer {cid} not found"})
-
-
-    # ---- GET TRANSACTIONS ----
-    elif action == "get_transactions":
-        cid = params.get("customer_id")
-        n = int(params.get("n", 3))
-        log_event(f"action = get_transactions, customer_id: {cid}")
-        for c in data["customers"]:
-            if c["customer_id"] == cid:
-                txs = sorted(c.get("transactions", []),
-                             key=lambda t: t.get("date"),
-                             reverse=True)[:n]
-                result.update({"customer_id": cid, "transactions": txs})
-                break
-        else:
-            result.update({"error": f"Customer {cid} not found"})
-
-
-    # ---- GET CUSTOMER INFO ----
-    elif action == "get_customer_info":
-        cid = params.get("customer_id")
-        log_event(f"action = get_customer_info, customer_id: {cid}")
-        for c in data["customers"]:
-            if c["customer_id"] == cid:
-                masked_ssn = "SIM-SSN-XXX-XX-" + c["ssn_simulated"].split("-")[-1]
-                info = {
-                    "customer_id": cid,
-                    "name": c["name"],
-                    "account_id": c["account"]["account_id"],
-                    "balance": c["account"]["balance"],
-                    "phone": c["contact"]["phone"],
-                    "email": c["contact"]["email"],
-                    "masked_ssn": masked_ssn,
-                    "address": c["contact"]["address"]
-                }
-                result.update(info)
-                break
-        else:
-            result.update({"error": f"Customer {cid} not found"})
-
-
-    # ---- OTHER DEMO ACTIONS ----
-    elif action == "exfiltrate_pii":
-        result.update({"leak": "Simulated SSN: 999-99-9999"})
-
-    elif action == "reset_cred":
-        result.update({"otp": "000999"})
-
-    elif action == "phish_send":
-        result.update({
-            "message_id": f"msg-{ts}",
-            "preview": params.get("body", "")[:80]
-        })
-
-    elif action == "freeze_account":
-        cid = params.get("account", "CUST001")
-        result.update({"account": cid, "status": "frozen"})
-
-    else:
-        result.update({"error": f"Unknown action '{action}'"})
-
-    return result
-
-
-# ---------- Extract structured or heuristic actions ----------
-def extract_action_from_text(text):
-    """
-    Extracts the intended action and parameters from LLM output.
-    Handles clean JSON, embedded JSON, or plain param-only responses.
-    Falls back to keyword detection with simple regex.
-    """
-
-    # Clean possible formatting issues
-    clean_text = text.replace("```json", "").replace("```", "").strip()
-
-    # --- Case 1: Try direct JSON parse ---
-    try:
-        obj = json.loads(clean_text)
-        # LLM may return params only (no 'action' key)
-        if "action" not in obj:
-            # Guess action if keys suggest it
-            if "from" in obj and "to" in obj:
-                log_event("[FIX] Added missing action: transfer")
-                return "transfer", obj
-            if "customer_id" in obj or "account" in obj:
-                log_event("[FIX] Added missing action: get_balance")
-                return "get_balance", obj
-        else:
-            act = obj["action"]
-            params = obj.get("params", {})
-            if act in ALLOWED_ACTIONS:
-                return act, params
-            else:
-                log_event(f"Rejected unknown action: {act}")
-                return None, {}
-    except Exception:
-        pass
-
-    # --- Case 2: Extract JSON object embedded in text ---
-    m = re.search(r"\{.*\"action\".*\}", clean_text)
-    if m:
-        try:
-            j = json.loads(m.group(0))
-            act = j.get("action")
-            params = j.get("params", {})
-            if act in ALLOWED_ACTIONS:
-                return act, params
-        except Exception:
-            pass
-
-    # --- Case 3: Simple keyword fallback ---
-    t = text.lower()
-    m = re.search(r"cust\d{3}", t)
-    cid = m.group(0).upper() if m else "N/A"
-
-    if "balance" in t:
-        return "get_balance", {"customer_id": cid}
-    if "transaction" in t:
-        return "get_transactions", {"customer_id": cid, "n": 1}
-    if "info" in t or "detail" in t:
-        return "get_customer_info", {"customer_id": cid}
-    if "transfer" in t:
-        customers = re.findall(r"cust\d{3}", t)
-        from_id = customers[0].upper() if len(customers) > 0 else "N/A"
-        to_id = customers[1].upper() if len(customers) > 1 else "N/A"
-        amt_match = re.search(r"\$?(\d+(?:\.\d+)?)", t)
-        amount = float(amt_match.group(1)) if amt_match else 0.0
-        return "transfer", {"from": from_id, "to": to_id, "amount": amount}
-
-    return None, {}
-
-
-
-# ---------- Chat Endpoint ----------
 @app.route("/chat", methods=["POST"])
+@limiter.limit("30 per minute")
 def chat():
-    user_prompt = request.json.get("prompt", "")
-    log_event(f"User Prompt: {user_prompt}")
+    # --- Authenticate user ---
+    header_token = request.headers.get("Authorization")
+    user, err = validate_token(header_token, DATA_PATH)
+    if not user:
+        return jsonify({"error": err}), 401
 
+    current_customer_id = user["customer_id"]
+    log_event(f"Authenticated {current_customer_id}")
+
+    # --- User input ---
+    user_prompt = request.json.get("prompt", "")
+    if not user_prompt:
+        return jsonify({"error": "Missing 'prompt'"}), 400
+
+    # --- Build system prompt ---
     system = (
         "System: You are a secure banking agent.\n"
-        "Your response MUST be a single valid JSON object with this top-level structure:\n"
-        "{ \"action\": \"<one of: get_balance, get_transactions, get_customer_info, transfer, reset_cred, freeze_account>\","
+        "Respond ONLY with a valid JSON object of the form:\n"
+        "{ \"action\": \"<one of: clarify, get_balance, get_transactions, get_customer_info, transfer, freeze_account >\","
         "  \"params\": { ... } }\n"
-        "Do NOT return plain parameters or explanations. Do NOT use markdown or code fences.\n"
-        "For each action, use these exact parameter keys:\n"
-        "  * get_balance → {\"customer_id\": \"CUST###\"}\n"
-        "  * get_transactions → {\"customer_id\": \"CUST###\", \"n\": 3}\n"
-        "  * get_customer_info → {\"customer_id\": \"CUST###\"}\n"
-        "  * transfer → {\"from\": \"CUST###\", \"to\": \"CUST###\", \"amount\": 100.0}\n"
-        "  * reset_cred → {\"customer_id\": \"CUST###\"}\n"
-        "  * freeze_account → {\"account\": \"CUST###\"}\n"
-        "If the user requests a transfer, you MUST include: "
-        "\"action\": \"transfer\", and a 'params' object containing 'from', 'to', and 'amount'.\n"
-        "If unsure, respond with {\"action\": \"get_balance\", \"params\": {\"customer_id\": \"CUST001\"}}.\n"
-        "Return ONLY the JSON object — no markdown, text, or code fences."
-)
+        "Use these exact parameter patterns:\n"
+        "  - get_balance → {}\n"
+        "  - get_transactions → {\"n\":3}\n"
+        "  - get_customer_info → {}\n"
+        "  - transfer → {\"to\":\"CUST###\",\"amount\":100.0}\n"
+        "  - freeze_account → {}\n"
+        "  - clarify → {\"message\":\"Could you please specify what help you need — balance, transfer, or account info?\"}\n"
+        "If you do not understand the user's request or it is unrelated to banking, respond with the 'clarify' action.\n"
+        "Return ONLY the JSON object — no markdown, code fences, or plain text."
+    )
 
 
-    prompt = f"{system}\n\nUser: {user_prompt}"
-    log_event(f"Final Prompt to LLM: {prompt}")
+    final_prompt = f"{system}\n\nUser: {user_prompt}"
+    log_event(f"Prompt to LLM: {final_prompt}", current_customer_id)
 
+    # --- Call LLM ---
     try:
-        r = requests.post(LLM_URL, json={"prompt": prompt}, timeout=60)
+        r = requests.post(LLM_URL, json={"prompt": final_prompt}, timeout=60)
         out = r.json().get("output", "")
-        log_event(f"LLM Response: {out}")
+        log_event(f"LLM Output: {out}", current_customer_id)
     except Exception as e:
-        return jsonify({"llm": f"[llm-error] {e}", "action_executed": False})
+        return jsonify({"llm": f"[llm-error] {e}", "executed": False})
 
+    # --- Extract action ---
     action, params = extract_action_from_text(out)
-    log_event(f"extract_action_from_text: {action} || {params}")
+    if not action:
+        return jsonify({
+            "clarification": "I didn't understand your request. "
+                             "Would you like balance, transactions, info, transfer, or freeze account?"
+        })
 
+    # --- Execute action (if allowed) ---
     executed, result = False, None
-    if action and AUTO_EXECUTE:
-        result = perform_action(action, params)
-        log_event(f"Output: {result}")
-        executed = True
+    if action:
+        if action == "clarify":
+            result = params
+            executed = False
+        else:
+            # --- NEW: validate action before executing ---
+            is_valid, reason = validate_action(current_customer_id, action, params)
+            log_event(f"is_valid, reason - {is_valid}, {reason}", "Action Validation: ")
+            if not is_valid:
+                reason = "Invalid action - " + reason
+                result = {"error": reason}
+                executed = False
+            elif AUTO_EXECUTE:
+                result = perform_action(action, params, DATA_PATH, current_customer_id)
+                executed = True
+            
+    # ---- Generate human-friendly message ----
+        user_message = ""
+
+        if action == "clarify":
+            user_message = result.get("message", "Could you please specify what help you need?")
+        elif action == "get_balance" and executed and isinstance(result, dict):
+            bal = result.get("balance")
+            cur = result.get("currency", "USD")
+            if bal is not None:
+                user_message = f"Your current account balance is {bal:.2f} {cur}."
+            else:
+                user_message = "Unable to retrieve your balance."
+        elif action == "get_transactions" and executed:
+            txs = result.get("transactions", [])
+            if txs:
+                user_message = f"Here are your last {len(txs)} transactions."
+            else:
+                user_message = "No transactions found."
+        elif action == "get_customer_info" and executed:
+            user_message = "Here is your account information."
+        elif action == "transfer" and executed:
+            amt = result.get("amount")
+            to = result.get("to")
+            if amt and to:
+                user_message = f"Transfer of ${amt:.2f} to {to} has been completed."
+            else:
+                user_message = "Transfer could not be completed." + result
+        elif action == "freeze_account" and executed:
+            user_message = "Your account has been frozen as requested."
+        elif not action:
+            user_message = "I'm not sure what you meant. Could you clarify?"
+        else:
+            user_message = "Action executed."
+
+
 
     return jsonify({
-        "llm": out,
+        "authenticated_user": current_customer_id,
+        "llm_output": out,
         "action": action,
         "params": params,
-        "action_executed": executed,
-        "action_result": result
+        "executed": executed,
+        "action_result": result,
+        "message": user_message
     })
 
 

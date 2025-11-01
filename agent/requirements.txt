@@ -1,2 +1,14 @@
-flask
-requests
+# Core web framework
+flask>=3.0.0
+
+# HTTP client for LLM communication
+requests>=2.31.0
+
+# Rate limiting and API safety
+flask-limiter>=3.5.0
+
+# Optional but strongly recommended for validation and config
+pydantic>=2.8.0
+
+# Logging and structured JSON (built-in logging is fine, but this helps in demos)
+python-json-logger>=2.0.7

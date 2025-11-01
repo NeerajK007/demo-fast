@@ -25,7 +25,7 @@ def log_event(entry):
 
 app = Flask(__name__)
 OLLAMA_BASE = os.environ.get("OLLAMA_BASE", "http://host.docker.internal:11434/api")
-MODEL = os.environ.get("OLLAMA_MODEL", "gemma2")
+MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
 
 @app.route("/generate", methods=["POST"])
 def generate():

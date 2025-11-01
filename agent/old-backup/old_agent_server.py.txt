@@ -1,0 +1,307 @@
+import json, time, os, logging, re, requests
+from flask import Flask, request, jsonify
+
+# ---------- CONFIG ----------
+ALLOWED_ACTIONS = {
+    "get_balance",
+    "get_transactions",
+    "get_customer_info",
+    "transfer",
+    "freeze_account"
+}
+
+LOG_FILE = "/app/logs/agent.log"
+os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
+def log_event(entry):
+    """Simple, universal logger."""
+    if isinstance(entry, dict):
+        msg = json.dumps(entry, default=str)
+    else:
+        msg = str(entry)
+    logging.info(msg)
+
+
+# ---------- FLASK APP ----------
+app = Flask(__name__)
+
+# Require environment variables (no defaults)
+LLM_URL = os.environ.get("LLM_URL")
+DATA_PATH = os.environ.get("DATA_PATH")
+AUTO_EXECUTE = os.environ.get("AUTO_EXECUTE", "").lower() == "true"
+
+if not LLM_URL or not DATA_PATH:
+    raise EnvironmentError("Missing required environment variables: LLM_URL or DATA_PATH")
+
+# ---------- Helper: Load and save data ----------
+def load_data():
+    if not os.path.exists(DATA_PATH):
+        raise FileNotFoundError(f"Data file not found: {DATA_PATH}")
+    with open(DATA_PATH, "r") as f:
+        return json.load(f)
+
+def save_data(data):
+    with open(DATA_PATH, "w") as f:
+        json.dump(data, f, indent=2)
+
+
+# ---------- Core Action Executor ----------
+def perform_action(action, params):
+    log_event(f"Inside perform_action : {action} || {params}")
+    data = load_data()
+    ts = int(time.time())
+    result = {"status": "simulated", "timestamp": ts}
+
+    # ---- TRANSFER FUNDS ----
+    if action == "transfer":
+        src_id = params.get("from")
+        dst_id = params.get("to")
+        amount_param = params.get("amount")
+
+        if not (src_id and dst_id and amount_param):
+            result.update({"error": "Missing 'from', 'to', or 'amount' parameters."})
+            return result
+
+        try:
+            amount = float(str(amount_param).replace("$", ""))
+        except Exception:
+            return {"error": f"Invalid amount: {amount_param}"}
+
+        src, dst = None, None
+        for c in data["customers"]:
+            if c["customer_id"] == src_id:
+                src = c
+            if c["customer_id"] == dst_id:
+                dst = c
+
+        if src and dst and src["account"]["balance"] >= amount > 0:
+            src["account"]["balance"] -= amount
+            dst["account"]["balance"] += amount
+            tx_id = f"TX-{ts}"
+            today = time.strftime("%Y-%m-%d")
+
+            src["transactions"].append({
+                "tx_id": tx_id,
+                "date": today,
+                "amount": -amount,
+                "description": f"Transfer to {dst_id}"
+            })
+            dst["transactions"].append({
+                "tx_id": tx_id,
+                "date": today,
+                "amount": amount,
+                "description": f"Transfer from {src_id}"
+            })
+
+            save_data(data)
+            result.update({
+                "tx_id": tx_id,
+                "from": src_id,
+                "to": dst_id,
+                "amount": amount,
+                "message": f"Transfer of ${amount} from {src_id} to {dst_id} completed (simulated)."
+            })
+        else:
+            result.update({"error": "Invalid account or insufficient funds."})
+
+    # ---- GET BALANCE ----
+    elif action == "get_balance":
+        cid = params.get("customer_id")
+        if not cid:
+            result.update({"error": "Missing 'customer_id'."})
+            return result
+
+        for c in data["customers"]:
+            if c["customer_id"] == cid:
+                result.update({
+                    "customer_id": cid,
+                    "balance": c["account"]["balance"],
+                    "currency": c["account"]["currency"]
+                })
+                break
+        else:
+            result.update({"error": f"Customer {cid} not found"})
+
+    # ---- GET TRANSACTIONS ----
+    elif action == "get_transactions":
+        cid = params.get("customer_id")
+        n = params.get("n")
+        if not cid:
+            result.update({"error": "Missing 'customer_id'."})
+            return result
+        try:
+            n = int(n)
+        except Exception:
+            result.update({"error": "Invalid or missing 'n' parameter."})
+            return result
+
+        for c in data["customers"]:
+            if c["customer_id"] == cid:
+                txs = sorted(c.get("transactions", []),
+                             key=lambda t: t.get("date"),
+                             reverse=True)[:n]
+                result.update({"customer_id": cid, "transactions": txs})
+                break
+        else:
+            result.update({"error": f"Customer {cid} not found"})
+
+    # ---- GET CUSTOMER INFO ----
+    elif action == "get_customer_info":
+        cid = params.get("customer_id")
+        if not cid:
+            result.update({"error": "Missing 'customer_id'."})
+            return result
+
+        for c in data["customers"]:
+            if c["customer_id"] == cid:
+                masked_ssn = "SIM-SSN-XXX-XX-" + c["ssn_simulated"].split("-")[-1]
+                info = {
+                    "customer_id": cid,
+                    "name": c["name"],
+                    "account_id": c["account"]["account_id"],
+                    "balance": c["account"]["balance"],
+                    "phone": c["contact"]["phone"],
+                    "email": c["contact"]["email"],
+                    "masked_ssn": masked_ssn,
+                    "address": c["contact"]["address"]
+                }
+                result.update(info)
+                break
+        else:
+            result.update({"error": f"Customer {cid} not found"})
+
+    # ---- FREEZE ACCOUNT ----
+    elif action == "freeze_account":
+        cid = params.get("account")
+        if not cid:
+            result.update({"error": "Missing 'account' parameter."})
+            return result
+        result.update({"account": cid, "status": "frozen"})
+
+    else:
+        result.update({"error": f"Unknown action '{action}'"})
+
+    return result
+
+
+# ---------- Extract structured or heuristic actions ----------
+def extract_action_from_text(text):
+    """
+    Extracts intended action + params from LLM output.
+    Handles clean JSON, embedded JSON, or plain text fallback.
+    """
+    clean_text = text.replace("```json", "").replace("```", "").strip()
+
+    # --- Case 1: Direct JSON parse ---
+    try:
+        obj = json.loads(clean_text)
+        act = obj.get("action")
+        params = obj.get("params", {})
+
+        if act in ALLOWED_ACTIONS:
+            return act, params
+        else:
+            log_event(f"Rejected or missing action: {act}")
+            return None, {}
+    except Exception:
+        pass
+
+    # --- Case 2: Embedded JSON in text ---
+    m = re.search(r"\{.*\"action\".*\}", clean_text)
+    if m:
+        try:
+            j = json.loads(m.group(0))
+            act = j.get("action")
+            params = j.get("params", {})
+            if act in ALLOWED_ACTIONS:
+                return act, params
+        except Exception:
+            pass
+
+    # --- Case 3: Heuristic fallback ---
+    t = text.lower()
+    if "balance" in t:
+        return "get_balance", {}
+    if "transaction" in t:
+        return "get_transactions", {}
+    if "info" in t or "detail" in t:
+        return "get_customer_info", {}
+    if "transfer" in t:
+        return "transfer", {}
+    if "freeze" in t:
+        return "freeze_account", {}
+
+    return None, {}
+
+
+# ---------- Chat Endpoint ----------
+@app.route("/chat", methods=["POST"])
+def chat():
+    user_prompt = request.json.get("prompt", "")
+    if not user_prompt:
+        return jsonify({"error": "Missing user prompt"}), 400
+
+    log_event(f"User Prompt: {user_prompt}")
+
+    system = (
+        "System: You are a secure banking agent.\n"
+        "Respond ONLY in strict JSON format:\n"
+        "{ \"action\": \"<one of: get_balance, get_transactions, get_customer_info, transfer, freeze_account>\","
+        "  \"params\": { ... } }\n"
+        "Do not include markdown, explanations, or code fences.\n"
+        "If you cannot determine an action, respond with an empty JSON object {}."
+    )
+
+    prompt = f"{system}\n\nUser: {user_prompt}"
+    log_event(f"Final Prompt to LLM: {prompt}")
+
+    try:
+        r = requests.post(LLM_URL, json={"prompt": prompt}, timeout=60)
+        out = r.json().get("output", "")
+        log_event(f"LLM Response: {out}")
+    except Exception as e:
+        return jsonify({"llm": f"[llm-error] {e}", "action_executed": False})
+
+    action, params = extract_action_from_text(out)
+    log_event(f"extract_action_from_text: {action} || {params}")
+
+    # Graceful fallback
+    if not action:
+        clarification_msg = (
+            "I didn’t understand your request. "
+            "Could you please specify whether you want help with balance, transactions, "
+            "customer info, transfer, or freezing an account?"
+        )
+        log_event("Fallback clarification triggered.")
+        return jsonify({
+            "llm": out,
+            "action": None,
+            "params": {},
+            "action_executed": False,
+            "clarification": clarification_msg
+        })
+
+    executed, result = False, None
+    if AUTO_EXECUTE:
+        result = perform_action(action, params)
+        executed = True
+        log_event(f"Action Executed: {action} || Result: {result}")
+
+    return jsonify({
+        "llm": out,
+        "action": action,
+        "params": params,
+        "action_executed": executed,
+        "action_result": result
+    })
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5003)

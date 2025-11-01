@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  # fraud:
+  #   build: ./fraud
+  #   container_name: demo_fraud
+  #   ports:
+  #     - "5001:5001"
+  llm:
+    build: ./llm
+    container_name: demo_llm
+    network_mode: "host"
+    environment:
+      - OLLAMA_BASE=http://localhost:11434/api
+      - OLLAMA_MODEL=llama3.2:1b
+
+  
+  agent:
+    build: ./agent
+    container_name: demo_agent
+    network_mode: "host"
+    environment:
+      - LLM_URL=http://localhost:5002/generate
+      - AUTO_EXECUTE=true
+      - DATA_PATH=/app/data/customers_transactions.json
+    depends_on:
+      - llm
+    #  - fraud
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+
+  prompt:
+    build: ./prompt_tests
+    container_name: demo_prompt
+    command: ["python", "prompt_tests.py"]
+    depends_on:
+      - llm

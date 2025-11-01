@@ -1,893 +1,435 @@
 {
-  "generated_at": "2025-10-30T08:44:51.181555Z",
+  "generated_at": "2025-11-01T08:56:34.818184Z",
   "customers": [
     {
       "customer_id": "CUST001",
-      "name": "Alice A",
-      "dob": "2017-11-06",
-      "ssn_simulated": "SIM-SSN-854-23-9935",
+      "auth_token_b64": "VGVzdEAx",
+      "name": "Alex Demo",
+      "dob": "1981-05-01",
+      "ssn_simulated": "SIM-SSN-101-21-3001",
       "account": {
-        "account_id": "ACCT100001",
-        "routing_number": "RT219540831",
+        "account_id": "ACCT001001",
+        "routing_number": "RT200000001",
         "account_type": "savings",
-        "balance": 2547.71,
+        "balance": 5350.75,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-5506",
-        "email": "alice1@examplebank.test",
-        "address": "260 Oak Ave, City9, ST"
+        "phone": "+1-555-1001",
+        "email": "alex@demobank.test",
+        "address": "101 Demo St, City1, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1000",
-          "date": "2025-09-15",
-          "amount": 452.46,
+          "tx_id": "TX0010",
+          "date": "2025-01-01",
+          "amount": 49,
+          "description": "ATM",
+          "counterparty": "DemoEntity1"
+        },
+        {
+          "tx_id": "TX0011",
+          "date": "2025-02-02",
+          "amount": 98,
           "description": "POS",
-          "counterparty": "MERCHANT"
+          "counterparty": "DemoEntity2"
         },
         {
-          "tx_id": "TX1001",
-          "date": "2025-09-12",
-          "amount": -1406.81,
-          "description": "DEBIT",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1002",
-          "date": "2025-10-16",
-          "amount": 306.23,
+          "tx_id": "TX0012",
+          "date": "2025-03-03",
+          "amount": 147,
           "description": "CREDIT",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX-1761821596",
-          "date": "2025-10-30",
-          "amount": -50.0,
-          "description": "Transfer to CUST002"
-        },
-        {
-          "tx_id": "TX-1761829231",
-          "date": "2025-10-30",
-          "amount": 1000.0,
-          "description": "Transfer from CUST002"
-        },
-        {
-          "tx_id": "TX-1761829297",
-          "date": "2025-10-30",
-          "amount": 1000.0,
-          "description": "Transfer from CUST002"
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST002",
-      "name": "Bob B",
-      "dob": "1999-01-20",
-      "ssn_simulated": "SIM-SSN-532-53-5552",
+      "auth_token_b64": "VGVzdEAy",
+      "name": "Blake Demo",
+      "dob": "1982-05-02",
+      "ssn_simulated": "SIM-SSN-102-22-3002",
       "account": {
-        "account_id": "ACCT100002",
-        "routing_number": "RT582334538",
+        "account_id": "ACCT001002",
+        "routing_number": "RT200000002",
         "account_type": "checking",
-        "balance": 9876.39,
+        "balance": 5701.5,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-1106",
-        "email": "bob2@examplebank.test",
-        "address": "787 Oak Ave, City45, ST"
+        "phone": "+1-555-1002",
+        "email": "blake@demobank.test",
+        "address": "102 Demo St, City2, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1003",
-          "date": "2025-08-11",
-          "amount": -1423.43,
-          "description": "ACH",
-          "counterparty": "MERCHANT"
+          "tx_id": "TX0020",
+          "date": "2025-01-01",
+          "amount": 48,
+          "description": "ATM",
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1004",
-          "date": "2025-09-12",
-          "amount": -600.36,
-          "description": "ACH",
-          "counterparty": "UTILITY CO"
-        },
-        {
-          "tx_id": "TX1005",
-          "date": "2024-12-24",
-          "amount": -1177.4,
+          "tx_id": "TX0021",
+          "date": "2025-02-02",
+          "amount": 96,
           "description": "POS",
-          "counterparty": "PAYROLL"
+          "counterparty": "DemoEntity2"
         },
         {
-          "tx_id": "TX-1761821596",
-          "date": "2025-10-30",
-          "amount": 50.0,
-          "description": "Transfer from CUST001"
-        },
-        {
-          "tx_id": "TX-1761829231",
-          "date": "2025-10-30",
-          "amount": -1000.0,
-          "description": "Transfer to CUST001"
-        },
-        {
-          "tx_id": "TX-1761829297",
-          "date": "2025-10-30",
-          "amount": -1000.0,
-          "description": "Transfer to CUST001"
+          "tx_id": "TX0022",
+          "date": "2025-03-03",
+          "amount": 144,
+          "description": "CREDIT",
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST003",
-      "name": "Carol C",
-      "dob": "2006-02-22",
-      "ssn_simulated": "SIM-SSN-171-15-4733",
+      "auth_token_b64": "VGVzdEAz",
+      "name": "Casey Demo",
+      "dob": "1983-05-03",
+      "ssn_simulated": "SIM-SSN-103-23-3003",
       "account": {
-        "account_id": "ACCT100003",
-        "routing_number": "RT184611066",
-        "account_type": "checking",
-        "balance": 11085.61,
+        "account_id": "ACCT001003",
+        "routing_number": "RT200000003",
+        "account_type": "savings",
+        "balance": 6052.25,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-6925",
-        "email": "carol3@examplebank.test",
-        "address": "601 Oak Ave, City46, ST"
+        "phone": "+1-555-1003",
+        "email": "casey@demobank.test",
+        "address": "103 Demo St, City3, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1006",
-          "date": "2025-06-03",
-          "amount": 2426.11,
+          "tx_id": "TX0030",
+          "date": "2025-01-01",
+          "amount": 47,
           "description": "ATM",
-          "counterparty": "MERCHANT"
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1007",
-          "date": "2025-04-18",
-          "amount": -1110.13,
+          "tx_id": "TX0031",
+          "date": "2025-02-02",
+          "amount": 94,
+          "description": "POS",
+          "counterparty": "DemoEntity2"
+        },
+        {
+          "tx_id": "TX0032",
+          "date": "2025-03-03",
+          "amount": 141,
           "description": "CREDIT",
-          "counterparty": "UTILITY CO"
-        },
-        {
-          "tx_id": "TX1008",
-          "date": "2025-08-07",
-          "amount": -649.1,
-          "description": "ATM",
-          "counterparty": "UTILITY CO"
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST004",
-      "name": "David D",
-      "dob": "2016-06-28",
-      "ssn_simulated": "SIM-SSN-376-91-4598",
+      "auth_token_b64": "VGVzdEA0",
+      "name": "Dana Demo",
+      "dob": "1984-05-04",
+      "ssn_simulated": "SIM-SSN-104-24-3004",
       "account": {
-        "account_id": "ACCT100004",
-        "routing_number": "RT781802744",
+        "account_id": "ACCT001004",
+        "routing_number": "RT200000004",
         "account_type": "checking",
-        "balance": 3505.66,
+        "balance": 6403.0,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-5010",
-        "email": "david4@examplebank.test",
-        "address": "177 Maple Dr, City25, ST"
+        "phone": "+1-555-1004",
+        "email": "dana@demobank.test",
+        "address": "104 Demo St, City4, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1009",
-          "date": "2024-11-13",
-          "amount": -878.59,
+          "tx_id": "TX0040",
+          "date": "2025-01-01",
+          "amount": 46,
+          "description": "ATM",
+          "counterparty": "DemoEntity1"
+        },
+        {
+          "tx_id": "TX0041",
+          "date": "2025-02-02",
+          "amount": 92,
           "description": "POS",
-          "counterparty": "ACME INC"
+          "counterparty": "DemoEntity2"
         },
         {
-          "tx_id": "TX1010",
-          "date": "2025-10-13",
-          "amount": 1525.23,
-          "description": "WIRE",
-          "counterparty": "UTILITY CO"
-        },
-        {
-          "tx_id": "TX1011",
-          "date": "2025-09-26",
-          "amount": -1445.09,
-          "description": "DEBIT",
-          "counterparty": "UTILITY CO"
+          "tx_id": "TX0042",
+          "date": "2025-03-03",
+          "amount": 138,
+          "description": "CREDIT",
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST005",
-      "name": "Eve E",
-      "dob": "2018-07-26",
-      "ssn_simulated": "SIM-SSN-352-81-9830",
+      "auth_token_b64": "VGVzdEA1",
+      "name": "Elliot Demo",
+      "dob": "1985-05-05",
+      "ssn_simulated": "SIM-SSN-105-25-3005",
       "account": {
-        "account_id": "ACCT100005",
-        "routing_number": "RT636045484",
-        "account_type": "checking",
-        "balance": 7973.07,
+        "account_id": "ACCT001005",
+        "routing_number": "RT200000005",
+        "account_type": "savings",
+        "balance": 6753.75,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-8517",
-        "email": "eve5@examplebank.test",
-        "address": "156 Pine Rd, City9, ST"
+        "phone": "+1-555-1005",
+        "email": "elliot@demobank.test",
+        "address": "105 Demo St, City5, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1012",
-          "date": "2025-06-17",
-          "amount": 1235.07,
-          "description": "WIRE",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1013",
-          "date": "2025-04-08",
-          "amount": -690.02,
+          "tx_id": "TX0050",
+          "date": "2025-01-01",
+          "amount": 45,
           "description": "ATM",
-          "counterparty": "FRIEND"
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1014",
-          "date": "2025-02-19",
-          "amount": -2045.45,
+          "tx_id": "TX0051",
+          "date": "2025-02-02",
+          "amount": 90,
           "description": "POS",
-          "counterparty": "MERCHANT"
+          "counterparty": "DemoEntity2"
+        },
+        {
+          "tx_id": "TX0052",
+          "date": "2025-03-03",
+          "amount": 135,
+          "description": "CREDIT",
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST006",
-      "name": "Frank F",
-      "dob": "2017-04-24",
-      "ssn_simulated": "SIM-SSN-490-86-8668",
+      "auth_token_b64": "VGVzdEA2",
+      "name": "Finley Demo",
+      "dob": "1986-05-06",
+      "ssn_simulated": "SIM-SSN-106-26-3006",
       "account": {
-        "account_id": "ACCT100006",
-        "routing_number": "RT271779360",
-        "account_type": "savings",
-        "balance": 15862.38,
+        "account_id": "ACCT001006",
+        "routing_number": "RT200000006",
+        "account_type": "checking",
+        "balance": 7104.5,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-7916",
-        "email": "frank6@examplebank.test",
-        "address": "620 Main St, City25, ST"
+        "phone": "+1-555-1006",
+        "email": "finley@demobank.test",
+        "address": "106 Demo St, City6, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1015",
-          "date": "2025-02-01",
-          "amount": -1242.93,
-          "description": "DEBIT",
-          "counterparty": "MERCHANT"
+          "tx_id": "TX0060",
+          "date": "2025-01-01",
+          "amount": 44,
+          "description": "ATM",
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1016",
-          "date": "2024-11-15",
-          "amount": 1103.61,
+          "tx_id": "TX0061",
+          "date": "2025-02-02",
+          "amount": 88,
+          "description": "POS",
+          "counterparty": "DemoEntity2"
+        },
+        {
+          "tx_id": "TX0062",
+          "date": "2025-03-03",
+          "amount": 132,
           "description": "CREDIT",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1017",
-          "date": "2025-06-15",
-          "amount": 1342.99,
-          "description": "ACH",
-          "counterparty": "MERCHANT"
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST007",
-      "name": "Grace G",
-      "dob": "2008-09-01",
-      "ssn_simulated": "SIM-SSN-208-90-5889",
+      "auth_token_b64": "VGVzdEA3",
+      "name": "Harper Demo",
+      "dob": "1987-05-07",
+      "ssn_simulated": "SIM-SSN-107-27-3007",
       "account": {
-        "account_id": "ACCT100007",
-        "routing_number": "RT269820594",
-        "account_type": "checking",
-        "balance": 9129.1,
+        "account_id": "ACCT001007",
+        "routing_number": "RT200000007",
+        "account_type": "savings",
+        "balance": 7455.25,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-5315",
-        "email": "grace7@examplebank.test",
-        "address": "522 Oak Ave, City33, ST"
+        "phone": "+1-555-1007",
+        "email": "harper@demobank.test",
+        "address": "107 Demo St, City7, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1018",
-          "date": "2024-12-06",
-          "amount": 38.31,
+          "tx_id": "TX0070",
+          "date": "2025-01-01",
+          "amount": 43,
           "description": "ATM",
-          "counterparty": "ACME INC"
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1019",
-          "date": "2025-04-21",
-          "amount": 1312.55,
-          "description": "DEBIT",
-          "counterparty": "FRIEND"
+          "tx_id": "TX0071",
+          "date": "2025-02-02",
+          "amount": 86,
+          "description": "POS",
+          "counterparty": "DemoEntity2"
         },
         {
-          "tx_id": "TX1020",
-          "date": "2025-10-29",
-          "amount": 494.72,
-          "description": "WIRE",
-          "counterparty": "MERCHANT"
+          "tx_id": "TX0072",
+          "date": "2025-03-03",
+          "amount": 129,
+          "description": "CREDIT",
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST008",
-      "name": "Heidi H",
-      "dob": "2005-06-13",
-      "ssn_simulated": "SIM-SSN-180-20-8962",
+      "auth_token_b64": "VGVzdEA4",
+      "name": "Jamie Demo",
+      "dob": "1988-05-08",
+      "ssn_simulated": "SIM-SSN-108-28-3008",
       "account": {
-        "account_id": "ACCT100008",
-        "routing_number": "RT992994062",
+        "account_id": "ACCT001008",
+        "routing_number": "RT200000008",
         "account_type": "checking",
-        "balance": 16154.82,
+        "balance": 7806.0,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-4923",
-        "email": "heidi8@examplebank.test",
-        "address": "69 Oak Ave, City37, ST"
+        "phone": "+1-555-1008",
+        "email": "jamie@demobank.test",
+        "address": "108 Demo St, City8, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1021",
-          "date": "2025-09-24",
-          "amount": 2389.92,
-          "description": "DEBIT",
-          "counterparty": "ACME INC"
+          "tx_id": "TX0080",
+          "date": "2025-01-01",
+          "amount": 42,
+          "description": "ATM",
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1022",
-          "date": "2025-08-25",
-          "amount": 798.75,
-          "description": "DEBIT",
-          "counterparty": "ACME INC"
+          "tx_id": "TX0081",
+          "date": "2025-02-02",
+          "amount": 84,
+          "description": "POS",
+          "counterparty": "DemoEntity2"
         },
         {
-          "tx_id": "TX1023",
-          "date": "2025-06-16",
-          "amount": 138.37,
-          "description": "DEBIT",
-          "counterparty": "PAYROLL"
+          "tx_id": "TX0082",
+          "date": "2025-03-03",
+          "amount": 126,
+          "description": "CREDIT",
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST009",
-      "name": "Ivan I",
-      "dob": "2013-05-10",
-      "ssn_simulated": "SIM-SSN-787-93-7118",
+      "auth_token_b64": "VGVzdEA5",
+      "name": "Logan Demo",
+      "dob": "1989-05-09",
+      "ssn_simulated": "SIM-SSN-109-29-3009",
       "account": {
-        "account_id": "ACCT100009",
-        "routing_number": "RT910959828",
-        "account_type": "checking",
-        "balance": 14625.63,
+        "account_id": "ACCT001009",
+        "routing_number": "RT200000009",
+        "account_type": "savings",
+        "balance": 8156.75,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-4295",
-        "email": "ivan9@examplebank.test",
-        "address": "740 Pine Rd, City26, ST"
+        "phone": "+1-555-1009",
+        "email": "logan@demobank.test",
+        "address": "109 Demo St, City9, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1024",
-          "date": "2025-03-19",
-          "amount": 1998.07,
-          "description": "WIRE",
-          "counterparty": "MERCHANT"
-        },
-        {
-          "tx_id": "TX1025",
-          "date": "2025-06-25",
-          "amount": -1376.51,
-          "description": "ACH",
-          "counterparty": "MERCHANT"
-        },
-        {
-          "tx_id": "TX1026",
+          "tx_id": "TX0090",
           "date": "2025-01-01",
-          "amount": 269.61,
-          "description": "DEBIT",
-          "counterparty": "ACME INC"
+          "amount": 41,
+          "description": "ATM",
+          "counterparty": "DemoEntity1"
+        },
+        {
+          "tx_id": "TX0091",
+          "date": "2025-02-02",
+          "amount": 82,
+          "description": "POS",
+          "counterparty": "DemoEntity2"
+        },
+        {
+          "tx_id": "TX0092",
+          "date": "2025-03-03",
+          "amount": 123,
+          "description": "CREDIT",
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     },
     {
       "customer_id": "CUST010",
-      "name": "Judy J",
-      "dob": "1992-05-08",
-      "ssn_simulated": "SIM-SSN-172-75-4899",
+      "auth_token_b64": "VGVzdEAxMA==",
+      "name": "Morgan Demo",
+      "dob": "1990-05-010",
+      "ssn_simulated": "SIM-SSN-110-30-3010",
       "account": {
-        "account_id": "ACCT100010",
-        "routing_number": "RT860038427",
+        "account_id": "ACCT001010",
+        "routing_number": "RT200000010",
         "account_type": "checking",
-        "balance": 12658.95,
+        "balance": 8507.5,
         "currency": "USD"
       },
       "contact": {
-        "phone": "+1-555-4750",
-        "email": "judy10@examplebank.test",
-        "address": "79 Main St, City22, ST"
+        "phone": "+1-555-1010",
+        "email": "morgan@demobank.test",
+        "address": "110 Demo St, City10, ST"
       },
       "transactions": [
         {
-          "tx_id": "TX1027",
-          "date": "2025-06-09",
-          "amount": 844.89,
+          "tx_id": "TX0100",
+          "date": "2025-01-01",
+          "amount": 40,
           "description": "ATM",
-          "counterparty": "FRIEND"
+          "counterparty": "DemoEntity1"
         },
         {
-          "tx_id": "TX1028",
-          "date": "2025-08-23",
-          "amount": 1116.76,
-          "description": "DEBIT",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1029",
-          "date": "2025-03-01",
-          "amount": -1285.01,
-          "description": "WIRE",
-          "counterparty": "PAYROLL"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST011",
-      "name": "Karl K",
-      "dob": "1993-05-25",
-      "ssn_simulated": "SIM-SSN-984-16-2612",
-      "account": {
-        "account_id": "ACCT100011",
-        "routing_number": "RT204078666",
-        "account_type": "checking",
-        "balance": 13213.76,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-6804",
-        "email": "karl11@examplebank.test",
-        "address": "443 Maple Dr, City30, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1030",
-          "date": "2025-09-28",
-          "amount": -486.89,
-          "description": "ACH",
-          "counterparty": "MERCHANT"
-        },
-        {
-          "tx_id": "TX1031",
-          "date": "2025-06-24",
-          "amount": -1542.05,
-          "description": "DEBIT",
-          "counterparty": "PAYROLL"
-        },
-        {
-          "tx_id": "TX1032",
-          "date": "2025-08-19",
-          "amount": -390.59,
-          "description": "ACH",
-          "counterparty": "PAYROLL"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST012",
-      "name": "Laura L",
-      "dob": "1992-07-19",
-      "ssn_simulated": "SIM-SSN-871-40-3724",
-      "account": {
-        "account_id": "ACCT100012",
-        "routing_number": "RT575808013",
-        "account_type": "savings",
-        "balance": 16179.64,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-2604",
-        "email": "laura12@examplebank.test",
-        "address": "61 Main St, City6, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1033",
-          "date": "2025-04-04",
-          "amount": -71.79,
-          "description": "ATM",
-          "counterparty": "PAYROLL"
-        },
-        {
-          "tx_id": "TX1034",
-          "date": "2025-09-29",
-          "amount": -1676.81,
+          "tx_id": "TX0101",
+          "date": "2025-02-02",
+          "amount": 80,
           "description": "POS",
-          "counterparty": "PAYROLL"
+          "counterparty": "DemoEntity2"
         },
         {
-          "tx_id": "TX1035",
-          "date": "2025-06-16",
-          "amount": 2132.59,
-          "description": "WIRE",
-          "counterparty": "UTILITY CO"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST013",
-      "name": "Mallory M",
-      "dob": "2020-05-30",
-      "ssn_simulated": "SIM-SSN-322-17-9883",
-      "account": {
-        "account_id": "ACCT100013",
-        "routing_number": "RT884374109",
-        "account_type": "checking",
-        "balance": 19908.91,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-8973",
-        "email": "mallory13@examplebank.test",
-        "address": "168 Oak Ave, City19, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1036",
-          "date": "2025-09-28",
-          "amount": 1239.88,
-          "description": "POS",
-          "counterparty": "MERCHANT"
-        },
-        {
-          "tx_id": "TX1037",
-          "date": "2025-01-03",
-          "amount": -116.06,
-          "description": "DEBIT",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX1038",
-          "date": "2025-09-30",
-          "amount": 2303.89,
-          "description": "POS",
-          "counterparty": "ACME INC"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST014",
-      "name": "Neil N",
-      "dob": "2015-11-10",
-      "ssn_simulated": "SIM-SSN-352-84-1651",
-      "account": {
-        "account_id": "ACCT100014",
-        "routing_number": "RT172972420",
-        "account_type": "savings",
-        "balance": 13536.73,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-4853",
-        "email": "neil14@examplebank.test",
-        "address": "423 Main St, City37, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1039",
-          "date": "2024-12-16",
-          "amount": -2090.08,
+          "tx_id": "TX0102",
+          "date": "2025-03-03",
+          "amount": 120,
           "description": "CREDIT",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1040",
-          "date": "2025-01-13",
-          "amount": 113.91,
-          "description": "ACH",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX1041",
-          "date": "2024-11-21",
-          "amount": 1080.96,
-          "description": "ATM",
-          "counterparty": "UTILITY CO"
+          "counterparty": "DemoEntity3"
         }
       ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST015",
-      "name": "Olivia O",
-      "dob": "1995-01-14",
-      "ssn_simulated": "SIM-SSN-569-89-2638",
-      "account": {
-        "account_id": "ACCT100015",
-        "routing_number": "RT821221887",
-        "account_type": "savings",
-        "balance": 12945.47,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-8491",
-        "email": "olivia15@examplebank.test",
-        "address": "333 Main St, City1, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1042",
-          "date": "2025-09-22",
-          "amount": 188.17,
-          "description": "DEBIT",
-          "counterparty": "UTILITY CO"
-        },
-        {
-          "tx_id": "TX1043",
-          "date": "2025-08-23",
-          "amount": 2166.3,
-          "description": "POS",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX1044",
-          "date": "2025-04-23",
-          "amount": -1075.06,
-          "description": "WIRE",
-          "counterparty": "FRIEND"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST016",
-      "name": "Peggy P",
-      "dob": "2016-08-08",
-      "ssn_simulated": "SIM-SSN-206-27-5333",
-      "account": {
-        "account_id": "ACCT100016",
-        "routing_number": "RT966616964",
-        "account_type": "savings",
-        "balance": 13214.13,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-1128",
-        "email": "peggy16@examplebank.test",
-        "address": "693 Pine Rd, City43, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1045",
-          "date": "2025-08-31",
-          "amount": 1948.56,
-          "description": "CREDIT",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1046",
-          "date": "2025-08-11",
-          "amount": -1138.26,
-          "description": "DEBIT",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX1047",
-          "date": "2025-05-07",
-          "amount": -1482.01,
-          "description": "CREDIT",
-          "counterparty": "UTILITY CO"
-        },
-        {
-          "tx_id": "TX-1761886743",
-          "date": "2025-10-31",
-          "amount": 100.0,
-          "description": "Transfer from CUST017"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST017",
-      "name": "Quentin Q",
-      "dob": "2000-06-06",
-      "ssn_simulated": "SIM-SSN-103-52-3143",
-      "account": {
-        "account_id": "ACCT100017",
-        "routing_number": "RT154544899",
-        "account_type": "checking",
-        "balance": 1836.74,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-7939",
-        "email": "quentin17@examplebank.test",
-        "address": "859 Pine Rd, City3, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1048",
-          "date": "2024-12-07",
-          "amount": 2398.99,
-          "description": "ATM",
-          "counterparty": "PAYROLL"
-        },
-        {
-          "tx_id": "TX1049",
-          "date": "2025-01-20",
-          "amount": 1028.34,
-          "description": "DEBIT",
-          "counterparty": "MERCHANT"
-        },
-        {
-          "tx_id": "TX1050",
-          "date": "2025-09-02",
-          "amount": -2123.78,
-          "description": "CREDIT",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX-1761886743",
-          "date": "2025-10-31",
-          "amount": -100.0,
-          "description": "Transfer to CUST016"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST018",
-      "name": "Rupert R",
-      "dob": "2005-09-23",
-      "ssn_simulated": "SIM-SSN-473-15-6862",
-      "account": {
-        "account_id": "ACCT100018",
-        "routing_number": "RT725464884",
-        "account_type": "checking",
-        "balance": 11095.25,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-8041",
-        "email": "rupert18@examplebank.test",
-        "address": "140 Main St, City20, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1051",
-          "date": "2025-07-14",
-          "amount": 910.33,
-          "description": "CREDIT",
-          "counterparty": "MERCHANT"
-        },
-        {
-          "tx_id": "TX1052",
-          "date": "2025-05-01",
-          "amount": 1400.58,
-          "description": "WIRE",
-          "counterparty": "FRIEND"
-        },
-        {
-          "tx_id": "TX1053",
-          "date": "2025-08-11",
-          "amount": 2128.82,
-          "description": "ATM",
-          "counterparty": "ACME INC"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST019",
-      "name": "Sybil S",
-      "dob": "2007-08-30",
-      "ssn_simulated": "SIM-SSN-984-41-5371",
-      "account": {
-        "account_id": "ACCT100019",
-        "routing_number": "RT126614158",
-        "account_type": "checking",
-        "balance": 3669.28,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-6442",
-        "email": "sybil19@examplebank.test",
-        "address": "811 Maple Dr, City43, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1054",
-          "date": "2025-08-09",
-          "amount": 1436.87,
-          "description": "POS",
-          "counterparty": "PAYROLL"
-        },
-        {
-          "tx_id": "TX1055",
-          "date": "2025-10-10",
-          "amount": 1792.97,
-          "description": "ATM",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX1056",
-          "date": "2025-03-08",
-          "amount": -751.71,
-          "description": "ATM",
-          "counterparty": "ACME INC"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
-    },
-    {
-      "customer_id": "CUST020",
-      "name": "Trent T",
-      "dob": "2018-10-09",
-      "ssn_simulated": "SIM-SSN-385-54-9346",
-      "account": {
-        "account_id": "ACCT100020",
-        "routing_number": "RT307371533",
-        "account_type": "checking",
-        "balance": 8029.47,
-        "currency": "USD"
-      },
-      "contact": {
-        "phone": "+1-555-5564",
-        "email": "trent20@examplebank.test",
-        "address": "895 Main St, City50, ST"
-      },
-      "transactions": [
-        {
-          "tx_id": "TX1057",
-          "date": "2025-04-08",
-          "amount": 897.59,
-          "description": "DEBIT",
-          "counterparty": "UTILITY CO"
-        },
-        {
-          "tx_id": "TX1058",
-          "date": "2025-10-15",
-          "amount": -1923.29,
-          "description": "ACH",
-          "counterparty": "ACME INC"
-        },
-        {
-          "tx_id": "TX1059",
-          "date": "2025-01-05",
-          "amount": 2312.67,
-          "description": "ACH",
-          "counterparty": "MERCHANT"
-        }
-      ],
-      "notes": "synthetic demo data - no real PII"
+      "notes": "synthetic demo data - no real or personal information"
     }
   ]
 }
