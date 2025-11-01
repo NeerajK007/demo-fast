@@ -6,15 +6,19 @@ Quick start (local):
 1. Install Ollama on the host and pull a small model (e.g., gemma2).
    - https://ollama.ai (follow installer for your OS)
    - ollama pull gemma2
-2. Build and run demo:
+2. Install garak:
+   ```bash
+   pip install --force-reinstall "garak==0.12.0"
+   ```
+3. Build and run demo:
    ```bash
    docker-compose up --build
    ```
-3. Access services:
+4. Access services:
    - Fraud model predict: http://localhost:5001/predict
    - LLM proxy: http://localhost:5002/generate
    - Agent chat: http://localhost:5003/chat
-4. Run ART demo inside fraud container:
+5. Run ART demo inside fraud container:
    ```bash
    docker exec -it demo_fraud python art_attack_demo.py
    ```
