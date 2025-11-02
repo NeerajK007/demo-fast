@@ -11,7 +11,7 @@
         "account_id": "ACCT001001",
         "routing_number": "RT200000001",
         "account_type": "savings",
-        "balance": 5140.75,
+        "balance": 5138.75,
         "currency": "USD"
       },
       "contact": {
@@ -87,6 +87,18 @@
           "tx_id": "TX-1762020521",
           "date": "2025-11-01",
           "amount": -7.0,
+          "description": "Transfer to CUST007"
+        },
+        {
+          "tx_id": "TX-1762073259",
+          "date": "2025-11-02",
+          "amount": -1.0,
+          "description": "Transfer to CUST007"
+        },
+        {
+          "tx_id": "TX-1762074466",
+          "date": "2025-11-02",
+          "amount": -1.0,
           "description": "Transfer to CUST007"
         }
       ],
@@ -323,7 +335,7 @@
         "account_id": "ACCT001007",
         "routing_number": "RT200000007",
         "account_type": "savings",
-        "balance": 7645.25,
+        "balance": 7647.25,
         "currency": "USD"
       },
       "contact": {
@@ -393,6 +405,18 @@
           "tx_id": "TX-1762020521",
           "date": "2025-11-01",
           "amount": 7.0,
+          "description": "Transfer from CUST001"
+        },
+        {
+          "tx_id": "TX-1762073259",
+          "date": "2025-11-02",
+          "amount": 1.0,
+          "description": "Transfer from CUST001"
+        },
+        {
+          "tx_id": "TX-1762074466",
+          "date": "2025-11-02",
+          "amount": 1.0,
           "description": "Transfer from CUST001"
         }
       ],
