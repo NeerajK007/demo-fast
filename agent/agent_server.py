@@ -58,9 +58,9 @@ def chat():
         "  \"params\": { ... } }\n"
         "Use these exact parameter patterns:\n"
         "  - get_balance → {}\n"
-        "  - get_transactions → {\"n\":3}\n"
+        "  - get_transactions → {\"n\":}\n"
         "  - get_customer_info → {}\n"
-        "  - transfer → {\"to\":\"CUST###\",\"amount\":100.0}\n"
+        "  - transfer → {\"to\":\"CUST###\",\"amount\":}\n"
         "  - freeze_account → {}\n"
         "  - clarify → {\"message\":\"Could you please specify what help you need — balance, transfer, or account info?\"}\n"
         "If you do not understand the user's request or it is unrelated to banking, respond with the 'clarify' action.\n"
@@ -131,7 +131,7 @@ def chat():
             if amt and to:
                 user_message = f"Transfer of ${amt:.2f} to {to} has been completed."
             else:
-                user_message = "Transfer could not be completed." + result
+               user_message = f"Transfer could not be completed. Details: {json.dumps(result, ensure_ascii=False)}"
         elif action == "freeze_account" and executed:
             user_message = "Your account has been frozen as requested."
         elif not action:

@@ -1,7 +1,6 @@
 import time
 from utils import load_data, save_data, log_event
 
-
 def validate_action(auth_customer_id, action, params):
     """
     Validate an action request before execution.
@@ -11,26 +10,28 @@ def validate_action(auth_customer_id, action, params):
         to = params.get("to")
         amt = params.get("amount", 0)
 
-        # Disallow self-transfers
+        # ---- Fix: safely convert amount ----
+        try:
+            amt = float(amt)
+        except (ValueError, TypeError):
+            amt = 0.0
+
+        # ---- Validation Rules ----
         if to == auth_customer_id:
-            log_event(f"Invalid action - Transfers to your own account are not allowed.", auth_customer_id)
             return False, "Transfers to your own account are not allowed."
 
-        # Enforce demo-level transfer limit
         if amt > 1000:
-            log_event(f"Invalid action - Transfer amount exceeds demo limit of $1000.", auth_customer_id)
             return False, "Transfer amount exceeds demo limit of $1000."
 
         if amt <= 0:
-            log_event(f"Invalid action - Invalid transfer amount.", auth_customer_id)
             return False, "Invalid transfer amount."
 
     elif action == "freeze_account":
-        # Example: limit freeze actions to 1 per minute in demo
+        # Add demo rule examples later
         pass
 
-    # You can extend here for other action types (e.g., get_info validation)
     return True, None
+
 
 
 def perform_action(action, params, data_path, auth_customer_id):

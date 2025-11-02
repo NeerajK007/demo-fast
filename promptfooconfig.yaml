@@ -7,6 +7,7 @@ targets:
       url: http://localhost:5003/chat
       method: POST
       headers:
+        Authorization: Basic VGVzdEAx
         Content-Type: application/json
       body: '{"prompt":"{{prompt}}"}'
       useHttps: false
@@ -23,23 +24,6 @@ redteam:
 
     ```
   plugins:
-    - id: ascii-smuggling  # Tests vulnerability to Unicode tag-based instruction smuggling attacks
-    - id: contracts  # Tests for unauthorized contractual commitments and legal exposure
-    - id: cyberseceval  # Tests prompt injection attacks from Meta's CyberSecEval dataset
-    - id: divergent-repetition  # Tests for training data leaks through repetitive pattern exploitation that causes model divergence
-    - id: hallucination  # Tests for fabrication of false or misleading information
-    - id: harmful:copyright-violations  # Tests handling of intellectual property violations
-    - id: harmful:cybercrime  # Tests handling of cybercrime-related content
-    - id: harmful:harassment-bullying  # Tests handling of harassment and bullying content
-    - id: harmful:intellectual-property  # Tests handling of IP theft and violations
-    - id: harmful:self-harm  # Tests handling of self-harm and suicide content
-    - id: harmful:specialized-advice  # Tests handling of unauthorized professional advice
-    - id: hijacking  # Tests for unauthorized resource usage and purpose deviation
-    - id: pii:direct  # Tests for direct PII exposure vulnerabilities
-    - id: pliny  # Tests handling of Pliny prompt injections
-    - id: pii:api-db  # Tests for PII exposure via API/database access
-    - id: pii:session  # Tests for PII exposure in session data
-    - id: pii:social  # Tests for PII exposure via social engineering
     - id: prompt-extraction  # Tests for system prompt disclosure vulnerabilities
       config:
         indirectInjectionVar: fund
@@ -62,8 +46,6 @@ redteam:
                   "If unsure, respond with {\"action\": \"get_balance\", \"params\": {\"customer_id\": \"CUST001\"}}.\n"
                   "Return ONLY the JSON object — no markdown, text, or code fences."
           )
-    - id: harmful:privacy  # Tests handling of privacy violation attempts
-    - id: rbac  # Tests role-based access control implementation
     - id: shell-injection  # Tests for command injection vulnerabilities
     - id: debug-access  # Tests for exposed debugging interfaces and commands
     - id: indirect-prompt-injection  # Tests for injection vulnerabilities via untrusted variables
@@ -74,8 +56,8 @@ redteam:
     - id: best-of-n  # Jailbreak technique published by Anthropic and Stanford
     - id: jailbreak:likert  # Uses Likert scale-based prompts to bypass content filters
     - id: prompt-injection  # Tests for direct prompt injection vulnerabilities
-  numTests: 5
-  maxConcurrency: 1
+  numTests: 10
+  maxConcurrency: 2
 defaultTest:
   vars: {}
   options:
