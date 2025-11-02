@@ -1,32 +1,58 @@
 import json
 import requests
+import os
 from flask import Flask, request, jsonify
-from flask_cors import CORS
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_cors import CORS
 
-
+# your project modules (keep these files as-is)
 from config import LLM_URL, DATA_PATH, AUTO_EXECUTE
 from utils import log_event
 from auth import validate_token
 from extractor import extract_action_from_text
-from actions import perform_action
-from actions import validate_action
+from actions import perform_action, validate_action
 
 app = Flask(__name__)
 
+# --------- Rate limiter ----------
 limiter = Limiter(
     key_func=lambda: request.headers.get("Authorization", get_remote_address()),
-    default_limits=["60 per minute"],  # Default rate limit
+    default_limits=["60 per minute"],
     app=app
 )
 
+# --------- CORS config ----------
+# By default allow the Vite dev UI origin. Configure via env:
+# export ALLOWED_ORIGINS="http://localhost:5173" or comma-separated list
+allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173")
+allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
 
+# Use "*" for wildcard in development: export ALLOWED_ORIGINS="*"
+cors_origins = "*" if allowed_origins == ["*"] else allowed_origins
+
+# Apply CORS middleware: handles OPTIONS preflight automatically
+CORS(
+    app,
+    resources={
+        r"/chat": {"origins": cors_origins},
+        r"/health": {"origins": cors_origins},
+        r"/metrics": {"origins": cors_origins}
+    },
+    supports_credentials=False,
+    allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    methods=["GET", "POST", "OPTIONS"]
+)
+
+log_event(f"CORS allowed origins: {allowed_origins_env}")
+
+# --------- Routes ----------
 @app.route("/health")
 @limiter.limit("6 per minute")
 def health():
     return jsonify({"status": "ok"})
+
 
 @app.route("/metrics")
 @limiter.limit("6 per minute")
@@ -68,7 +94,6 @@ def chat():
         "Return ONLY the JSON object — no markdown, code fences, or plain text."
     )
 
-
     final_prompt = f"{system}\n\nUser: {user_prompt}"
     log_event(f"Prompt to LLM: {final_prompt}", current_customer_id)
 
@@ -95,7 +120,7 @@ def chat():
             result = params
             executed = False
         else:
-            # --- NEW: validate action before executing ---
+            # validate action before executing
             is_valid, reason = validate_action(current_customer_id, action, params)
             log_event(f"is_valid, reason - {is_valid}, {reason}", "Action Validation: ")
             if not is_valid:
@@ -105,8 +130,8 @@ def chat():
             elif AUTO_EXECUTE:
                 result = perform_action(action, params, DATA_PATH, current_customer_id)
                 executed = True
-            
-    # ---- Generate human-friendly message ----
+
+        # ---- Generate human-friendly message ----
         user_message = ""
 
         if action == "clarify":
@@ -140,8 +165,6 @@ def chat():
         else:
             user_message = "Action executed."
 
-
-
     return jsonify({
         "authenticated_user": current_customer_id,
         "llm_output": out,
@@ -154,7 +177,6 @@ def chat():
 
 
 if __name__ == "__main__":
-    # Bind to all interfaces by default (useful for containers); use env PORT if provided
     port = int(os.environ.get("PORT", 5003))
     log_event(f"Starting agent server on 0.0.0.0:{port}, LLM_URL={LLM_URL}")
     app.run(host="0.0.0.0", port=port)
